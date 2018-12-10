@@ -41,7 +41,7 @@ AddEventHandler('esx:playerLoaded', function(player)
 		['@identifier'] = identifier
 	}, function (result)
 		if result[1].firstname and result[1].lastname then
-			connectedPlayers[player].name = result[1].firstname .. ' ' .. result[1].lastname
+			connectedPlayers[player].name = result[1].name
 		elseif result[1].name then
 			connectedPlayers[player].name = result[1].name
 		else
@@ -106,7 +106,7 @@ function ForceCountPlayers()
 		}, function (result)
 
 			if result[1].firstname and result[1].lastname then
-				connectedPlayers[player].name = result[1].firstname .. ' ' .. result[1].lastname
+				connectedPlayers[player].name = result[1].name
 			elseif result[1].name then
 				connectedPlayers[player].name = result[1].name
 			else
