@@ -41,7 +41,7 @@ AddEventHandler('esx:playerLoaded', function(player)
 		['@identifier'] = identifier
 	}, function (result)
 		if result[1].firstname and result[1].lastname then
-			connectedPlayers[player].name = result[1].firstname .. ' ' .. result[1].lastname
+			connectedPlayers[player].name = result[1].name
 		elseif result[1].name then
 			connectedPlayers[player].name = result[1].name
 		else
@@ -106,7 +106,7 @@ function ForceCountPlayers()
 		}, function (result)
 
 			if result[1].firstname and result[1].lastname then
-				connectedPlayers[player].name = result[1].firstname .. ' ' .. result[1].lastname
+				connectedPlayers[player].name = result[1].name
 			elseif result[1].name then
 				connectedPlayers[player].name = result[1].name
 			else
@@ -143,6 +143,7 @@ end
 function CountJobs()
 	local EMSConnected = 0
 	local PoliceConnected = 0
+	local FibConnected = 0
 	local TaxiConnected = 0
 	local MechanicConnected = 0
 	local CardealerConnected = 0
@@ -159,6 +160,8 @@ function CountJobs()
 			EMSConnected = EMSConnected + 1
 		elseif xPlayer.job.name == 'police' then
 			PoliceConnected = PoliceConnected + 1
+		elseif xPlayer.job.name == 'fib' then
+			FibConnected = FibConnected + 1
 		elseif xPlayer.job.name == 'taxi' then
 			TaxiConnected = TaxiConnected + 1
 		elseif xPlayer.job.name == 'mecano' then
@@ -173,6 +176,7 @@ function CountJobs()
 	TriggerClientEvent('esx_scoreboard:updatePlayerJobs', -1, json.encode({
 			ems = EMSConnected,
 			police = PoliceConnected,
+			fib = FibConnected,
 			taxi = TaxiConnected,
 			mechanic = MechanicConnected,
 			cardealer = CardealerConnected,
