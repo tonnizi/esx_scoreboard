@@ -1,5 +1,4 @@
 var visable = false;
-	idVisable = true;
 
 $(function () {
 	window.addEventListener('message', function (event) {
@@ -21,33 +20,35 @@ $(function () {
 				break;
 
 			case 'toggleID':
-				if (idVisable) {
-					$('td:nth-child(2),th:nth-child(2)').hide();
-				} else {
+
+				if (event.data.state) {
 					$('td:nth-child(2),th:nth-child(2)').show();
+					$('td:nth-child(5),th:nth-child(5)').show();
+				} else {
+					$('td:nth-child(2),th:nth-child(2)').hide();
+					$('td:nth-child(5),th:nth-child(5)').hide();
 				}
 
-				idVisable = !idVisable;
 				break;
 
 			case 'updatePlayerJobs':
-				var json = JSON.parse(event.data.jobs);
+				var jobs = event.data.jobs;
 
-				$('#player_count').html(json.player_count);
+				$('#player_count').html(jobs.player_count);
 
-				$('#ems').html(json.ems);
-				$('#police').html(json.police);
-				$('#taxi').html(json.taxi);
-				$('#mechanic').html(json.mechanic);
-				$('#cardealer').html(json.cardealer);
-				$('#estate').html(json.estate);
+				$('#ems').html(jobs.ems);
+				$('#police').html(jobs.police);
+				$('#taxi').html(jobs.taxi);
+				$('#mechanic').html(jobs.mechanic);
+				$('#cardealer').html(jobs.cardealer);
+				$('#estate').html(jobs.estate);
 				break;
 
 			case 'updatePlayerList':
 				$('#playerlist tr:gt(0)').remove();
 				$('#playerlist').append(event.data.players);
 				applyPingColor();
-				sortPlayerList();
+				//sortPlayerList();
 				break;
 
 			case 'updatePing':
@@ -79,7 +80,7 @@ $(function () {
 
 function applyPingColor() {
 	$('#playerlist tr').each(function () {
-		$(this).find('td:nth-child(3)').each(function () {
+		$(this).find('td:nth-child(3),td:nth-child(6)').each(function () {
 			var ping = $(this).html();
 			var color = 'green';
 
@@ -98,11 +99,15 @@ function applyPingColor() {
 
 // Todo: not the best code
 function updatePing(players) {
-	jQuery.each(players, function (i, v) {
-		if (v != null) {
+	jQuery.each(players, function (index, element) {
+		if (element != null) {
 			$('#playerlist tr:not(.heading)').each(function () {
-				$(this).find('td:nth-child(2):contains(' + v.id + ')').each(function () {
-					$(this).parent().find('td').eq(2).html(v.ping);
+				$(this).find('td:nth-child(2):contains(' + element.id + ')').each(function () {
+					$(this).parent().find('td').eq(2).html(element.ping);
+				});
+
+				$(this).find('td:nth-child(5):contains(' + element.id + ')').each(function () {
+					$(this).parent().find('td').eq(5).html(element.ping);
 				});
 			});
 		}
@@ -114,7 +119,6 @@ function sortPlayerList() {
 		rows = $('tr:not(.heading)', table);
 
 	rows.sort(function(a, b) {
-
 		var keyA = $('td', a).eq(1).html();
 		var keyB = $('td', b).eq(1).html();
 
